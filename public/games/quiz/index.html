@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quiz Game</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; }
+        .question { font-size: 20px; margin: 20px 0; }
+        button { display: block; margin: 10px auto; width: 200px; }
+    </style>
+</head>
+<body>
+    <h2>Quiz Game</h2>
+    <div class="question" id="question"></div>
+    <div id="options"></div>
+    <div id="score"></div>
+    <div id="buttons">
+        <button onclick="resetGame()">🔄 Reset</button>
+        <button onclick="goBack()">⬅️ Kembali</button>
+    </div>
+
+
+    <script>
+        const questions = [
+            {q: "What is the capital of France?", o: ["Paris", "Rome", "Berlin"], a: 0},
+            {q: "5 + 7 = ?", o: ["10", "12", "11"], a: 1},
+            {q: "HTML stands for?", o: ["HyperText", "HelloText", "Hyperlink"], a: 0}
+        ];
+
+        let index = 0, score = 0;
+        const question = document.getElementById("question");
+        const options = document.getElementById("options");
+
+        function resetGame() {
+            cells.forEach(cell => {
+                cell.textContent = "";
+                cell.classList.remove("x", "o");
+            });
+            document.getElementById("result").textContent = "";
+            turn = "X";
+        }
+
+        function goBack() {
+            window.location.href = "/"; 
+        }
+
+        function loadQuestion() {
+            if (index >= questions.length) {
+                document.getElementById("score").textContent = `Your score: ${score}/${questions.length}`;
+                question.textContent = "";
+                options.innerHTML = "";
+                return;
+            }
+
+            question.textContent = questions[index].q;
+            options.innerHTML = "";
+            questions[index].o.forEach((opt, i) => {
+                const btn = document.createElement("button");
+                btn.textContent = opt;
+                btn.onclick = () => {
+                    if (i === questions[index].a) score++;
+                    index++;
+                    loadQuestion();
+                };
+                options.appendChild(btn);
+            });
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
