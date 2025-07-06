@@ -7,7 +7,7 @@ Route::get('/', function () {
 });
 
 Route::get('/games/{game}', function ($game) {
-    $availableGames = ['tic-tac-toe', 'memory-game', 'quiz'];
+    $availableGames = ['tic-tac-toe', 'memory-game', 'quiz','Snake-kejedot'];
 
     if (!in_array($game, $availableGames)) {
         abort(404);

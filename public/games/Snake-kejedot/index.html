@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Snake Game - Jadul</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
+      margin: 0;
+      background: #111;
+      color: white;
+    }
+    h1 {
+      margin-top: 20px;
+      color: #0f0;
+    }
+    #game-board {
+      margin: 20px 0;
+      background: #222;
+      display: grid;
+      grid-template-rows: repeat(20, 20px);
+      grid-template-columns: repeat(20, 20px);
+      gap: 1px;
+    }
+    .cell {
+      width: 20px;
+      height: 20px;
+      background: #333;
+    }
+    .snake {
+      background: limegreen;
+    }
+    .food {
+      background: red;
+    }
+    #score {
+      margin: 10px;
+      font-size: 18px;
+    }
+    #buttons {
+      margin-top: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      font-size: 16px;
+      background: #0f0;
+      border: none;
+      border-radius: 5px;
+      color: black;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #4f4;
+    }
+  </style>
+</head>
+<body>
+  <h1>🐍 Snake Game</h1>
+  <div id="score">Skor: 0</div>
+  <div id="game-board"></div>
+
+  <div id="buttons" style="display:none;">
+    <button onclick="startGame()">🔄 Ulang</button>
+    <button onclick="goBack()">⬅️ Kembali</button>
+  </div>
+
+  <script>
+    const boardSize = 20;
+    const board = document.getElementById('game-board');
+    const scoreDisplay = document.getElementById('score');
+    const buttons = document.getElementById('buttons');
+
+    let snake = [42, 41, 40];
+    let direction = 1;
+    let food = 0;
+    let interval = null;
+    let score = 0;
+
+    function createBoard() {
+      board.innerHTML = '';
+      for (let i = 0; i < boardSize * boardSize; i++) {
+        const cell = document.createElement('div');
+        cell.classList.add('cell');
+        board.appendChild(cell);
+      }
+    }
+
+    function draw() {
+      const cells = document.querySelectorAll('.cell');
+      cells.forEach(c => c.className = 'cell');
+      snake.forEach(index => cells[index]?.classList.add('snake'));
+      cells[food]?.classList.add('food');
+    }
+
+    function randomFood() {
+      const emptyCells = [...Array(boardSize * boardSize).keys()].filter(i => !snake.includes(i));
+      food = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+    }
+
+    function move() {
+      const head = snake[0];
+      const x = head % boardSize;
+      const y = Math.floor(head / boardSize);
+      let newHead = head + direction;
+
+      // Benturan ke dinding
+      if (
+        (direction === 1 && x === boardSize - 1) ||
+        (direction === -1 && x === 0) ||
+        (direction === boardSize && y === boardSize - 1) ||
+        (direction === -boardSize && y === 0)
+      ) return gameOver();
+
+      // Tabrak badan sendiri
+      if (snake.includes(newHead)) return gameOver();
+
+      snake.unshift(newHead);
+
+      if (newHead === food) {
+        score++;
+        scoreDisplay.textContent = `Skor: ${score}`;
+        randomFood();
+      } else {
+        snake.pop();
+      }
+
+      draw();
+    }
+
+    function gameOver() {
+      clearInterval(interval);
+      scoreDisplay.textContent += ' - GAME OVER!';
+      buttons.style.display = 'block';
+    }
+
+    function startGame() {
+      snake = [42, 41, 40];
+      direction = 1;
+      score = 0;
+      scoreDisplay.textContent = 'Skor: 0';
+      buttons.style.display = 'none';
+      createBoard();
+      randomFood();
+      draw();
+      clearInterval(interval);
+      interval = setInterval(move, 200);
+    }
+
+    function goBack() {
+      window.location.href = '/'; // Ganti sesuai halaman utama kamu
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowUp' && direction !== boardSize) direction = -boardSize;
+      else if (e.key === 'ArrowDown' && direction !== -boardSize) direction = boardSize;
+      else if (e.key === 'ArrowLeft' && direction !== 1) direction = -1;
+      else if (e.key === 'ArrowRight' && direction !== -1) direction = 1;
+    });
+
+    startGame();
+  </script>
+</body>
+</html>
