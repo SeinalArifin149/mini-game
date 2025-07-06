@@ -99,7 +99,7 @@
         
         .brand {
             font-size: 14px;
-            color: #ff6b6b;
+            color:rgb(20, 20, 20);
             font-weight: 400;
             margin-bottom: 10px;
             text-transform: uppercase;
@@ -182,7 +182,9 @@
         }
         
         .game-link:nth-child(4) {
-            background: linear-gradient(45deg, #ffeaa7, #fdcb6e);
+            background: linear-gradient(45deg, #50C878, #228B22); /* Changed to forest green colors */
+            color: #E0FFE0; /* Lighter text color for better contrast */
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3); /* Added text shadow for better readability */
         }
         
         .stars {

@@ -1,0 +1,20 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "api/index.php",
+        "use": "@vercel/php"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/games/(.*)",
+        "dest": "api/index.php"
+      },
+      {
+        "src": "/(.*)",
+        "dest": "api/index.php"
+      }
+    ]
+  }
+  

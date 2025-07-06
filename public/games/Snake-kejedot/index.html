@@ -59,6 +59,47 @@
     button:hover {
       background: #4f4;
     }
+
+    /* Replace the existing mobile controls styles with these */
+    #mobile-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+
+    .controls-row {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .control-btn {
+      width: 60px;
+      height: 60px;
+      background: rgba(0, 255, 0, 0.1);
+      border: 2px solid #0f0;
+      border-radius: 50%;
+      color: #0f0;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s ease;
+    }
+
+    .control-btn:hover {
+      background: rgba(0, 255, 0, 0.2);
+      transform: scale(1.1);
+    }
+
+    .control-btn:active {
+      background: rgba(0, 255, 0, 0.4);
+      transform: scale(0.95);
+    }
   </style>
 </head>
 <body>
@@ -69,6 +110,19 @@
   <div id="buttons" style="display:none;">
     <button onclick="startGame()">🔄 Ulang</button>
     <button onclick="goBack()">⬅️ Kembali</button>
+  </div>
+
+  <div id="mobile-controls">
+    <div class="controls-row">
+      <div class="control-btn" id="up-btn">⬆️</div>
+    </div>
+    <div class="controls-row">
+      <div class="control-btn" id="left-btn">⬅️</div>
+      <div class="control-btn" id="right-btn">➡️</div>
+    </div>
+    <div class="controls-row">
+      <div class="control-btn" id="down-btn">⬇️</div>
+    </div>
   </div>
 
   <script>
@@ -163,6 +217,28 @@
       else if (e.key === 'ArrowLeft' && direction !== 1) direction = -1;
       else if (e.key === 'ArrowRight' && direction !== -1) direction = 1;
     });
+
+    // Add touch controls
+    document.getElementById('up-btn').addEventListener('click', () => {
+      if (direction !== boardSize) direction = -boardSize;
+    });
+
+    document.getElementById('down-btn').addEventListener('click', () => {
+      if (direction !== -boardSize) direction = boardSize;
+    });
+
+    document.getElementById('left-btn').addEventListener('click', () => {
+      if (direction !== 1) direction = -1;
+    });
+
+    document.getElementById('right-btn').addEventListener('click', () => {
+      if (direction !== -1) direction = 1;
+    });
+
+    // Prevent scrolling when touching the controls
+    document.getElementById('mobile-controls').addEventListener('touchmove', (e) => {
+      e.preventDefault();
+    }, { passive: false });
 
     startGame();
   </script>
